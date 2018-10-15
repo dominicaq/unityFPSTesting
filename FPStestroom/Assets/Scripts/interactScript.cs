@@ -9,10 +9,6 @@ public class interactScript : MonoBehaviour {
     [SerializeField] private float rayLength = 2.5f;
 
     private Vector3 rayOrigin = new Vector3(0.5f, 0.5f, 0f); // Center of screen
-
-    void Start () {
-
-    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -24,21 +20,17 @@ public class interactScript : MonoBehaviour {
         // Interact statements
         if (Input.GetKeyDown("e") && Physics.Raycast(interactRay, out hit, rayLength))
         {
+            interactable target = hit.transform.GetComponent<interactable>();
+
             if (hit.collider.tag == "Button")
             {
-                interactable target = hit.transform.GetComponent<interactable>();
-
                 if (target != null)
                 {
                     target.isPressed = true;
                 }
             }
-            else if (hit.collider.tag == "pickup")
-            {
-                Debug.Log("Pickup");
-            }
         }
-
+            
         // Debug mode
         if (debugMode)
         {
