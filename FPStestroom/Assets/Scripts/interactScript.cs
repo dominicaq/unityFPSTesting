@@ -6,6 +6,7 @@ public class interactScript : MonoBehaviour {
 
     public bool debugMode = false;
 
+    // Pickup variables
     private Transform player;
 
     public Transform grabHandle;
@@ -14,13 +15,16 @@ public class interactScript : MonoBehaviour {
 
     private Rigidbody heldRigid;
 
+    private bool carrying = false;
+
+    private float lerp = 0;
+    //
+
     [SerializeField] private float rayLength = 2.5f;
 
     private Vector3 rayOrigin = new Vector3(0.5f, 0.5f, 0f); // Center of screen
 
-    private bool carrying = false;
 
-    private float lerp = 0, speed = 1;
 
     void Start () {
        player = this.transform;
@@ -80,7 +84,7 @@ public class interactScript : MonoBehaviour {
     {
         if (carrying)
         {
-            lerp += Time.deltaTime / speed;
+            lerp += Time.deltaTime / 0.01f;
             heldObject.transform.position = Vector3.Lerp(heldObject.transform.position, grabHandle.transform.position, lerp);
             heldObject.transform.rotation = Quaternion.Lerp(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
         }
