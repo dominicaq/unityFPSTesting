@@ -20,6 +20,8 @@ public class interactScript : MonoBehaviour {
 
     private bool carrying = false;
 
+    private float lerp = 0, speed = 1;
+
     void Start () {
        player = this.transform;
     }
@@ -48,14 +50,13 @@ public class interactScript : MonoBehaviour {
                 // Gathering required info on hit
                 heldObject = hit.collider.gameObject;
                 heldRigid = hit.rigidbody;
-
                 //
+
+                // Making object parent to player
                 heldRigid.GetComponent<Rigidbody>().useGravity = false;
-                heldRigid.GetComponent<Rigidbody>().isKinematic = true;
                 heldObject.transform.rotation = player.transform.rotation;
                 heldObject.transform.parent = grabHandle.transform;
-                heldObject.transform.position = grabHandle.transform.position;
-                //
+                //heldObject.transform.position = grabHandle.transform.position;
 
                 carrying = true;
             }
@@ -63,15 +64,25 @@ public class interactScript : MonoBehaviour {
         else if (Input.GetKeyDown("e") && carrying)
         {
             heldRigid.GetComponent<Rigidbody>().useGravity = true;
-            heldRigid.GetComponent<Rigidbody>().isKinematic = false;
             heldObject.transform.parent = null;
+            heldRigid = null;
             carrying = false;
         }
-            
+
         // Debug mode
         if (debugMode)
         {
             Debug.DrawRay(interactRay.origin, interactRay.direction * rayLength, Color.blue);
+        }
+
+    }
+    void FixedUpdate()
+    {
+        if (carrying)
+        {
+            lerp += Time.deltaTime / speed;
+            heldObject.transform.position = Vector3.Lerp(heldObject.transform.position, grabHandle.transform.position, lerp);
+            heldObject.transform.rotation = Quaternion.Lerp(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
         }
 
     }
