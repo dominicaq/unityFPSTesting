@@ -49,7 +49,7 @@ public class interactScript : MonoBehaviour {
                     target.isPressed = true;
                 }
             }
-            else if (hit.collider.tag == "pickup")
+            else if (hit.rigidbody != null && hit.collider.tag != "FPSController")
             {
                 // Gathering required info on hit
                 heldObject = hit.collider.gameObject;
@@ -57,7 +57,7 @@ public class interactScript : MonoBehaviour {
                 //
 
                 // Making object parent to player
-                heldRigid.GetComponent<Rigidbody>().useGravity = false;
+                heldRigid.useGravity = false;
                 heldObject.transform.rotation = player.transform.rotation;
                 heldObject.transform.parent = grabHandle.transform;
                 //heldObject.transform.position = grabHandle.transform.position;
@@ -67,7 +67,13 @@ public class interactScript : MonoBehaviour {
         }
         else if (Input.GetKeyDown("e") && carrying)
         {
-            heldRigid.GetComponent<Rigidbody>().useGravity = true;
+            // Nullify Velocity
+            heldRigid.useGravity = true;
+            heldRigid.velocity = new Vector3(0,0,0);
+            heldRigid.angularVelocity = new Vector3(0, 0, 0);
+            heldRigid.AddForce(transform.up * -3f);
+
+            // Kill any link between object and player
             heldObject.transform.parent = null;
             heldRigid = null;
             carrying = false;
@@ -78,15 +84,15 @@ public class interactScript : MonoBehaviour {
         {
             Debug.DrawRay(interactRay.origin, interactRay.direction * rayLength, Color.blue);
         }
-
     }
+
     void FixedUpdate()
     {
         if (carrying)
         {
             lerp += Time.deltaTime;
-            heldObject.transform.position = Vector3.Lerp(heldObject.transform.position, grabHandle.transform.position, lerp);
-            heldObject.transform.rotation = Quaternion.Lerp(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
+            heldRigid.transform.position = Vector3.Lerp(heldObject.transform.position, grabHandle.transform.position, lerp);
+            heldRigid.transform.rotation = Quaternion.Lerp(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
         }
 
     }
