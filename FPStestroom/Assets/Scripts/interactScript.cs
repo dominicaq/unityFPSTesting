@@ -51,6 +51,7 @@ public class interactScript : MonoBehaviour {
 
                 //
                 heldRigid.GetComponent<Rigidbody>().useGravity = false;
+                heldRigid.GetComponent<Rigidbody>().isKinematic = true;
                 heldObject.transform.rotation = player.transform.rotation;
                 heldObject.transform.parent = grabHandle.transform;
                 heldObject.transform.position = grabHandle.transform.position;
@@ -62,6 +63,7 @@ public class interactScript : MonoBehaviour {
         else if (Input.GetKeyDown("e") && carrying)
         {
             heldRigid.GetComponent<Rigidbody>().useGravity = true;
+            heldRigid.GetComponent<Rigidbody>().isKinematic = false;
             heldObject.transform.parent = null;
             carrying = false;
         }
