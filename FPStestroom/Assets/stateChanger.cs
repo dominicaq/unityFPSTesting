@@ -6,6 +6,8 @@ public class stateChanger : MonoBehaviour {
 
     public bool switchState = false;
 
+    private bool oneShot = false;
+
     private Animation Animator;
 
     void Start()
@@ -15,10 +17,10 @@ public class stateChanger : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (switchState)
+        if (switchState && !oneShot)
         {
             Animator.Play();
-            switchState = false;
+            oneShot = true;
         }
 	}
 }
