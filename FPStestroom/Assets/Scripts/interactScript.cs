@@ -84,7 +84,7 @@ public class interactScript : MonoBehaviour {
     {
         if (carrying)
         {
-            lerp += Time.deltaTime / 0.01f;
+            lerp += Time.deltaTime;
             heldObject.transform.position = Vector3.Lerp(heldObject.transform.position, grabHandle.transform.position, lerp);
             heldObject.transform.rotation = Quaternion.Lerp(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
         }
