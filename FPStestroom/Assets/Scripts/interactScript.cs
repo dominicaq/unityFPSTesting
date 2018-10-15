@@ -37,6 +37,8 @@ public class interactScript : MonoBehaviour {
         RaycastHit hit = new RaycastHit();
         Ray interactRay = Camera.main.ViewportPointToRay(rayOrigin);
 
+        Vector3 zeroing = new Vector3(0, 0, 0);
+
         // Interact statements
         if (Input.GetKeyDown("e") && Physics.Raycast(interactRay, out hit, rayLength) && !carrying)
         {
@@ -69,8 +71,8 @@ public class interactScript : MonoBehaviour {
         {
             // Nullify Velocity
             heldRigid.useGravity = true;
-            heldRigid.velocity = new Vector3(0,0,0);
-            heldRigid.angularVelocity = new Vector3(0, 0, 0);
+            heldRigid.velocity = zeroing;
+            heldRigid.angularVelocity = zeroing;
             heldRigid.AddForce(transform.up * -3f);
 
             // Kill any link between object and player
@@ -88,11 +90,12 @@ public class interactScript : MonoBehaviour {
 
     void FixedUpdate()
     {
+        Quaternion rotation = new Quaternion(0, 0, 0, 0);
         if (carrying)
         {
             lerp += Time.deltaTime;
-            heldRigid.transform.position = Vector3.Lerp(heldObject.transform.position, grabHandle.transform.position, lerp);
-            heldRigid.transform.rotation = Quaternion.Lerp(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
+            heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
+            heldObject.transform.LookAt(player);
         }
 
     }
