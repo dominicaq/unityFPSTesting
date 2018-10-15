@@ -90,12 +90,12 @@ public class interactScript : MonoBehaviour {
 
     void FixedUpdate()
     {
-        Quaternion rotation = new Quaternion(0, 0, 0, 0);
+        Vector3 rotation = new Vector3(0, 0, 0);
         if (carrying)
         {
             lerp += Time.deltaTime;
             heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
-            heldObject.transform.LookAt(player);
+            heldObject.transform.rotation = Quaternion.RotateTowards(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
         }
 
     }
