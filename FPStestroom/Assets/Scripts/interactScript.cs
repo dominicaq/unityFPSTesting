@@ -24,8 +24,6 @@ public class interactScript : MonoBehaviour {
 
     private Vector3 rayOrigin = new Vector3(0.5f, 0.5f, 0f); // Center of screen
 
-
-
     void Start () {
        player = this.transform;
     }
@@ -56,14 +54,20 @@ public class interactScript : MonoBehaviour {
                 // Gathering required info on hit
                 heldObject = hit.collider.gameObject;
                 heldRigid = hit.rigidbody;
+                Vector3 geometry = heldObject.transform.localScale;
+                float grabVolume = geometry.x * geometry.y * geometry.z;
                 //
 
-                // Making object parent to player
-                heldRigid.useGravity = false;
-                heldRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                heldObject.transform.rotation = player.transform.rotation;
-                heldObject.transform.parent = grabHandle.transform;
-                carrying = true;
+                // Disallow large volume grabs
+                if (grabVolume < 4)
+                {
+                    // Making object parent to player
+                    heldRigid.useGravity = false;
+                    heldRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                    heldObject.transform.rotation = player.transform.rotation;
+                    heldObject.transform.parent = grabHandle.transform;
+                    carrying = true;
+                }
             }
         }
         else if (Input.GetKeyDown("e") && carrying)
