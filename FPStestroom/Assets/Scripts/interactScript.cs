@@ -60,10 +60,9 @@ public class interactScript : MonoBehaviour {
 
                 // Making object parent to player
                 heldRigid.useGravity = false;
+                heldRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                 heldObject.transform.rotation = player.transform.rotation;
                 heldObject.transform.parent = grabHandle.transform;
-                //heldObject.transform.position = grabHandle.transform.position;
-
                 carrying = true;
             }
         }
@@ -71,12 +70,12 @@ public class interactScript : MonoBehaviour {
         {
             // Nullify Velocity
             heldRigid.useGravity = true;
+            heldRigid.AddForce(transform.up * -3f);
             heldRigid.velocity = zeroing;
             heldRigid.angularVelocity = zeroing;
-            heldRigid.AddForce(transform.up * -3f);
-
             // Kill any link between object and player
             heldObject.transform.parent = null;
+            heldRigid.collisionDetectionMode = CollisionDetectionMode.Discrete;
             heldRigid = null;
             carrying = false;
         }
@@ -90,13 +89,12 @@ public class interactScript : MonoBehaviour {
 
     void FixedUpdate()
     {
-        Vector3 rotation = new Vector3(0, 0, 0);
         if (carrying)
         {
             lerp += Time.deltaTime;
             heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
-            heldObject.transform.rotation = Quaternion.RotateTowards(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
+            heldObject.transform.LookAt(player);
+            //heldObject.transform.rotation = Quaternion.RotateTowards(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
         }
-
     }
 }
