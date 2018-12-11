@@ -6,6 +6,8 @@ public class interactScript : MonoBehaviour {
 
     public bool debugMode = false;
 
+    public float playerStrength = 4;
+
     // Pickup variables
     private Transform player;
 
@@ -49,17 +51,16 @@ public class interactScript : MonoBehaviour {
                     target.isPressed = true;
                 }
             }
-            else if (hit.rigidbody != null && hit.collider.tag != "FPSController")
+            else if (hit.rigidbody != null && hit.collider.tag != "Unit")
             {
                 // Gathering required info on hit
                 heldObject = hit.collider.gameObject;
                 heldRigid = hit.rigidbody;
                 Vector3 geometry = heldObject.transform.localScale;
                 float grabVolume = geometry.x * geometry.y * geometry.z;
-                //
 
                 // Disallow large volume grabs
-                if (grabVolume < 4)
+                if (grabVolume < playerStrength)
                 {
                     // Making object parent to player
                     heldRigid.useGravity = false;
@@ -86,19 +87,17 @@ public class interactScript : MonoBehaviour {
 
         // Debug mode
         if (debugMode)
-        {
             Debug.DrawRay(interactRay.origin, interactRay.direction * rayLength, Color.blue);
-        }
     }
 
     void FixedUpdate()
     {
         if (carrying)
         {
+            // Need to find fix for object moving through walls
             lerp += Time.deltaTime;
             heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
             heldObject.transform.LookAt(player);
-            //heldObject.transform.rotation = Quaternion.RotateTowards(heldObject.transform.rotation, grabHandle.transform.rotation, lerp);
         }
     }
 }
