@@ -4,53 +4,37 @@ using UnityEngine;
 
 public class interactScript : MonoBehaviour {
 
-    public bool debugMode = false;
-
     public float playerStrength = 4;
-
-    // Pickup variables
-    private Transform player;
-
     public Transform grabHandle;
-
     private GameObject heldObject;
-
     private Rigidbody heldRigid;
-
     private bool carrying = false;
-
-    private float lerp = 0;
+    private GameObject player;
+    //private ConfigurableJoint joint;
     //
-
-    [SerializeField] private float rayLength = 2.5f;
-
+    private float rayLength = 2.5f;
     private Vector3 rayOrigin = new Vector3(0.5f, 0.5f, 0f); // Center of screen
+    private float lerp = 0;
 
-    void Start () {
-       player = this.transform;
+    void Start() 
+    {
+        player = this.gameObject;
+        //joint = player.GetComponent<ConfigurableJoint>();
     }
-	
-	// Update is called once per frame
+
 	void Update ()
     {
         // Creating ray components
         RaycastHit hit = new RaycastHit();
         Ray interactRay = Camera.main.ViewportPointToRay(rayOrigin);
-
-        Vector3 zeroing = new Vector3(0, 0, 0);
-
+        
         // Interact statements
         if (Input.GetKeyDown("e") && Physics.Raycast(interactRay, out hit, rayLength) && !carrying)
         {
             interactable target = hit.transform.GetComponent<interactable>();
 
-            if (hit.collider.tag == "Button")
-            {
-                if (target != null)
-                {
-                    target.isPressed = true;
-                }
-            }
+            if (hit.collider.tag == "Button" && target != null)
+                target.isPressed = true;
             else if (hit.rigidbody != null && hit.collider.tag != "Unit")
             {
                 // Gathering required info on hit
@@ -62,32 +46,31 @@ public class interactScript : MonoBehaviour {
                 // Disallow large volume grabs
                 if (grabVolume < playerStrength)
                 {
-                    // Making object parent to player
                     heldRigid.useGravity = false;
-                    heldRigid.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                    heldObject.transform.rotation = player.transform.rotation;
                     heldObject.transform.parent = grabHandle.transform;
                     carrying = true;
                 }
             }
         }
         else if (Input.GetKeyDown("e") && carrying)
-        {
-            // Nullify Velocity
-            heldRigid.useGravity = true;
-            heldRigid.AddForce(transform.up * -3f);
-            heldRigid.velocity = zeroing;
-            heldRigid.angularVelocity = zeroing;
-            // Kill any link between object and player
-            heldObject.transform.parent = null;
-            heldRigid.collisionDetectionMode = CollisionDetectionMode.Discrete;
-            heldRigid = null;
-            carrying = false;
-        }
+            Drop();
 
-        // Debug mode
-        if (debugMode)
-            Debug.DrawRay(interactRay.origin, interactRay.direction * rayLength, Color.blue);
+        //Debug.DrawRay(interactRay.origin, interactRay.direction * rayLength, Color.blue);
+    }
+
+    void Drop()
+    {
+        Vector3 zeroing = new Vector3(0, 0, 0);
+        // Nullify Velocity
+        heldRigid.useGravity = true;
+        heldRigid.AddForce(transform.up * -3f);
+        heldRigid.velocity = zeroing;
+        heldRigid.angularVelocity = zeroing;
+
+        // Kill link
+        heldObject.transform.parent = null;
+        carrying = false;
+        //joint.connectedBody = null;
     }
 
     void FixedUpdate()
@@ -97,7 +80,8 @@ public class interactScript : MonoBehaviour {
             // Need to find fix for object moving through walls
             lerp += Time.deltaTime;
             heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
-            heldObject.transform.LookAt(player);
+            //joint.connectedBody = heldRigid;
+            heldObject.transform.LookAt(this.transform);
         }
     }
 }
