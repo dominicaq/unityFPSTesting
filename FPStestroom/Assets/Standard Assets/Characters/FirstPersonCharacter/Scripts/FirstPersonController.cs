@@ -61,6 +61,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
+            int filler = 0;
+            filler = 1;
             float speed;
             GetInput(out speed);
             // always move along the camera forward as it is the direction that it being aimed at

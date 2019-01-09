@@ -26,7 +26,8 @@ public class drone_hover : MonoBehaviour
 	void hover(float hoverHeight)
 	{
         RaycastHit hit;
-        if((Physics.Raycast(drone.position, Vector3.down, out hit, hoverHeight)) && hit.transform.tag != "Unit")
+		Vector3 rayOrigin = new Vector3(0,-1,0);
+        if((Physics.Raycast(drone.position, rayOrigin, out hit, hoverHeight)) && hit.transform.tag != "Unit")
 		{
             float hoverEval = hit.point.y + hoverHeight;
             float hoverForce = Mathf.Max(hoverEval - drone.position.y, 0f);
@@ -35,7 +36,8 @@ public class drone_hover : MonoBehaviour
             if(drone.position.y < hoverEval)
                 rb_drone.AddForce(Vector3.up * hoverForce, ForceMode.VelocityChange);
         }
-
+		Debug.DrawRay(drone.position, rayOrigin, Color.green);
+		
 		/*
 		RaycastHit wall;
 		Vector3 angle = (drone.forward + drone.right).normalized;
@@ -44,7 +46,7 @@ public class drone_hover : MonoBehaviour
 			rb_drone.AddForce(Vector3.up * 5, ForceMode.VelocityChange);
 		}
 
-		Debug.DrawRay(hit.origin, hit.direction * hover_height, Color.green);
+		
 		*/
 	}
 

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class interactScript : MonoBehaviour {
 
+    public bool enableInteract = true;
+    public bool enableGrab = true;
     public float playerStrength = 4;
     public Transform grabHandle;
     private GameObject heldObject;
     private Rigidbody heldRigid;
     private bool carrying = false;
     private GameObject player;
-    //private ConfigurableJoint joint;
-    //
     private float rayLength = 2.5f;
     private Vector3 rayOrigin = new Vector3(0.5f, 0.5f, 0f); // Center of screen
     private float lerp = 0;
@@ -19,7 +19,6 @@ public class interactScript : MonoBehaviour {
     void Start() 
     {
         player = this.gameObject;
-        //joint = player.GetComponent<ConfigurableJoint>();
     }
 
 	void Update ()
@@ -33,9 +32,9 @@ public class interactScript : MonoBehaviour {
         {
             interactable target = hit.transform.GetComponent<interactable>();
 
-            if (hit.collider.tag == "Button" && target != null)
+            if (hit.collider.tag == "Button" && target != null && enableInteract)
                 target.isPressed = true;
-            else if (hit.rigidbody != null && hit.collider.tag != "Unit")
+            else if (hit.rigidbody != null && hit.collider.tag != "Unit" && enableGrab)
             {
                 // Gathering required info on hit
                 heldObject = hit.collider.gameObject;
@@ -70,7 +69,6 @@ public class interactScript : MonoBehaviour {
         // Kill link
         heldObject.transform.parent = null;
         carrying = false;
-        //joint.connectedBody = null;
     }
 
     void FixedUpdate()
@@ -80,7 +78,6 @@ public class interactScript : MonoBehaviour {
             // Need to find fix for object moving through walls
             lerp += Time.deltaTime;
             heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
-            //joint.connectedBody = heldRigid;
             heldObject.transform.LookAt(this.transform);
         }
     }
