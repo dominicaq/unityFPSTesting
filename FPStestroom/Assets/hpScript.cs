@@ -18,7 +18,7 @@ public class hpScript : MonoBehaviour
     public bool isDead = false;
     private int overHeal;
     
-    private int health_bar;
+    public int health_bar;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +35,7 @@ public class hpScript : MonoBehaviour
         // Debugging
         if(shootSelf)
         {
+            //actionHeal(100);
             actionDamage(12, sharp);
             shootSelf = false;
         }
@@ -53,14 +54,8 @@ public class hpScript : MonoBehaviour
         }
 
 
-
         if (health_bar < 0)
             isDead = true;
-    }
-
-    public void actionArmor(int amount)
-    {
-        armor += amount;
     }
 
     public void actionDamage(int amount, bool piercing)
@@ -76,10 +71,12 @@ public class hpScript : MonoBehaviour
         }
         else
             health_bar -= amount;
-            
-        Debug.Log("Player HP:" + health_bar);
-        Debug.Log("Player Armor:" + armor);            
     }
+
+    public void actionArmor(int amount)
+    {
+        armor += amount;
+    }    
 
     public void actionHeal(int amount)
     {
