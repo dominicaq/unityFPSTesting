@@ -7,11 +7,6 @@ public class hpScript : MonoBehaviour
     public int maxHealth = 100;
     public int armor;
     public int maxArmor;
-    // Testing
-    public bool shootSelf;
-    public bool sharp;
-    //
-    // Regen time variables
     public float buffDegradeRate = .5f;
     private float timeStamp = 0;
     // End
@@ -25,20 +20,13 @@ public class hpScript : MonoBehaviour
     {
         maxArmor = 50;
         overHeal = maxHealth + 50;
-        armor = 70;
+        armor = 50;
         health_bar = maxHealth;
     }
 
     // Update is called once per frame
     void Update()
     {
-        // Debugging
-        if(shootSelf)
-        {
-            //actionHeal(100);
-            actionDamage(12, sharp);
-            shootSelf = false;
-        }
         // Prevent going over limit
         if(armor > maxArmor)
             armor = maxArmor;
@@ -53,7 +41,6 @@ public class hpScript : MonoBehaviour
             health_bar -= 1;
         }
 
-
         if (health_bar < 0)
             isDead = true;
     }
@@ -62,6 +49,7 @@ public class hpScript : MonoBehaviour
     {
         if(armor > 0 && !piercing)
         {
+            Debug.Log("Recieved " + amount + " damage");
             armor -= amount;
             if (armor < 0)
             {

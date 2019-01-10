@@ -5,25 +5,29 @@ using UnityEngine.UI;
 
 public class healthHUD : MonoBehaviour
 {
-    hpScript playerData;
+    hpScript playerHP;
     public Text armor;
     public Text health;
 
     // Start is called before the first frame update
     void Start()
     {
-        playerData = transform.GetComponent<hpScript>();
+        playerHP = transform.GetComponent<hpScript>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        int hp = playerData.health_bar;
-        int armorint = playerData.armor;
-        
+        // Store int and convert to string for HUD
+        int hp = playerHP.health_bar;
+        int armorint = playerHP.armor;
+
         string armorString = armorint.ToString();
         string hpString = hp.ToString();
+        //
 
+
+        // Set HUD text
         armor.text = armorString;
         health.text = hpString;
     }
