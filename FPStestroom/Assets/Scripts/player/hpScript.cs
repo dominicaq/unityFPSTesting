@@ -49,7 +49,6 @@ public class hpScript : MonoBehaviour
     {
         if(armor > 0 && !piercing)
         {
-            Debug.Log("Recieved " + amount + " damage");
             armor -= amount;
             if (armor < 0)
             {

@@ -11,15 +11,9 @@ public class interactScript : MonoBehaviour {
     private GameObject heldObject;
     private Rigidbody heldRigid;
     private bool carrying = false;
-    private GameObject player;
     private float rayLength = 2.5f;
     private Vector3 rayOrigin = new Vector3(0.5f, 0.5f, 0f); // Center of screen
     private float lerp = 0;
-
-    void Start() 
-    {
-        player = this.gameObject;
-    }
 
 	void Update ()
     {
@@ -77,8 +71,15 @@ public class interactScript : MonoBehaviour {
         {
             // Need to find fix for object moving through walls
             lerp += Time.deltaTime;
-            heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
-            heldObject.transform.LookAt(this.transform);
+            try
+            {
+                heldObject.transform.position = Vector3.MoveTowards(heldObject.transform.position, grabHandle.transform.position, lerp);
+                heldObject.transform.LookAt(this.transform);
+            }
+            catch
+            {
+                carrying = false;
+            }
         }
     }
 }

@@ -6,8 +6,6 @@ public class dayNightCycle : MonoBehaviour
 {
 
     [SerializeField] private Vector3 homeLocation = new Vector3(0, 3, 0);
-    [SerializeField] private Vector3 homeRotation = new Vector3(50, -30, 0);
-
     [SerializeField] public Vector3 setSunRotation = new Vector3(0, 0, 0);
 
     public int speed = 1;
